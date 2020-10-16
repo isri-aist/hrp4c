@@ -1,0 +1,16 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+model=${prefix}/share/OpenHRP-3.1/robot/HRP4C/model
+libdir=${prefix}/share/OpenHRP-3.1/customizer
+link_shared_files=@PKG_CONF_LINK_SHARED_FILES@
+link_static_files=@PKG_CONF_LINK_STATIC_FILES@
+link_depend_dirs=@PKG_CONF_LINK_DEPEND_DIRS@
+link_depend_files=@PKG_CONF_LINK_DEPEND_FILES@
+link_depend_options=@PKG_CONF_LINK_DEPEND_OPTS@
+
+Name: hrp4c
+Description: HRP4C models
+Requires:
+Version: @CPACK_PACKAGE_VERSION_MAJOR@.@CPACK_PACKAGE_VERSION_MINOR@.@CPACK_PACKAGE_VERSION_PATCH@
+Libs: ${link_depend_dirs} -L${libdir} ${link_shared_files} ${link_depend_options} ${link_depend_files}
+Libs.private: ${link_static_files}
+Cflags:

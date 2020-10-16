@@ -1,0 +1,3 @@
+[submodule "generate_robot_description"]
+	path = generate_robot_description
+	url = https://github.com/arntanguy/generate_robot_description

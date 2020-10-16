@@ -1,0 +1,13 @@
+export robot_name="hrp4c"
+export robot_desc_name="${robot_name}_description"
+export description="Robot description files for the ${robot_name} robot"
+export version="0.1.0"
+export maintainter_name="Fumio KANEHIRO"
+export maintainter_email="fkanehiro@gmail.com"
+export robot_repository="isri-aist/hrp4c"
+export robot_description_repository="isri-aist/hrp4c_description"
+export tmp_path="/tmp/generate_${robot_desc_name}"      # tmp_path were the files are generated
+export gen_path="/tmp/${robot_desc_name}"               # path were the robot_description package gets generated
+export build_dir="$robot_dir/build"                     # path to the build directory
+export models="HRP4Cmain.wrl"        # VRML models to convert to URDF (space-separated)
+export urdf_mesh_prefix="package://${robot_desc_name}"  # Prefix for the mesh paths in the urdf
