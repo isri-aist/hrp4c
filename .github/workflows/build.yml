@@ -1,0 +1,61 @@
+name: CI of hrp4c
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  generate:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-18.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        submodules: recursive
+    - name: Install dependencies
+      uses: jrl-umi3218/github-actions/install-dependencies@master
+      with:
+        compiler: ${{ matrix.compiler }}
+        build-type: ${{ matrix.build-type }}
+        ubuntu: |
+          apt: mesh-sampling libopenhrp-dev libeigen3-dev ros-melodic-collada-urdf ros-melodic-rosbash qhull-bin rsync
+          apt-mirrors:
+            arntanguy:
+              mirror: https://dl.bintray.com/arntanguy/ppa-head
+              key: F6D3710D0B5016967A994DFFA650E12EFF6D3EDE
+            multi-contact:
+              mirror: https://dl.bintray.com/gergondet/multi-contact-head
+              key: 892EA6EE273707C6495A6FB6220D644C64666806
+            ros:
+              mirror: http://packages.ros.org/ros/ubuntu
+              key-uri: http://packages.ros.org/ros.key
+    - name: Show libs 
+      shell: bash
+      run: |
+        ls /usr/lib
+    - name: Build and test
+      uses: jrl-umi3218/github-actions/build-cmake-project@master
+      with:
+        compiler: ${{ matrix.compiler }}
+        build-type: ${{ matrix.build-type }}
+    - name: Generate models
+      shell: bash
+      run: |
+        source /opt/ros/melodic/setup.bash
+        cd generate_robot_description
+        ./generate_robot_description.sh
+    - name: Upload robot description
+      shell: bash
+      env:
+        REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+      run: |
+        cd generate_robot_description
+        ./update_repository.sh
+      if: github.ref == 'refs/heads/master' && github.repository == 'isri-aist/hrp4c'
